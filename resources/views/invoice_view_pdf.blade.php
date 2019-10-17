@@ -455,22 +455,24 @@ tbody, .bold {
 @endsection
 
 @section('content')
-<section class="invoice-main ">
-    <div class="container invoice-container shadow">
+{{dd($data)}}
+    <section class="invoice-main">
+    <div class="container m-auto invoice-container shadow">
         <section id="showcase ">
-            <div class="row container pt-4 ">
+            <div class="row container pt-3 ">
                 <div class="col-6 mb-4">
                     <h1> Invoice </h1>
-                    <address contenteditable="">
-                        <p> <b>Project:</b> branding and marketing</p>
-                        <p> <b>Lancer:</b> Endurance dan-jumbo</p>
-                        <p> <b>Email:</b> Edanjumbo@gmail.com</p>
-                        <p> <b>Address:</b> Accra, Ghana</p>
+                    <address >
+                        <p> <b>Project:</b> {{$invoice->title}}</p>
+                        <p> <b>Lancer:</b> {{auth()->user()->name}}</p>
+                        <p> <b>Email:</b> {{auth()->user()->email}}</p>
+                        {{-- <p> <b>Address:</b> Accra, Ghana</p> --}}
                     </address>
                 </div>
 
                 <div class="col-6">
-                    <img src="https://res.cloudinary.com/samtech/image/upload/v1570725037/My_Logo_-_Black.png" class="img-fluid logo-img">
+                    <img src="https://res.cloudinary.com/samtech/image/upload/v1570725037/My_Logo_-_Black.png"
+                        class="img-fluid logo-img">
                 </div>
             </div>
             <table class="table-responsive" style="width: 100%">
@@ -482,112 +484,106 @@ tbody, .bold {
                     </tr>
                 </thead>
                 <tbody>
-                <tr>
-                    <td><span contenteditable="">John Doe</span> </td>
-                    <td><span contenteditable=""> 18th September 2019</span></td>
-                    <td> N/A</td>      
-                </tr>
-                <tr>
-                  <td><span contenteditable="">Johndoe@gmail.com</span></td>
-                    <td></td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td><span contenteditable="">Accra, Ghana</span> </td>
-                    <th class="table-date"> Due Date</th>
-                    <th class="table-date"> Amount Due</th>
-                </tr>
-                <tr>
-                  <td></td>
-                  <td><span contenteditable="">28th September 2019</span> </td>
-                  <td><span contenteditable="" class="tableAmount">NGN 38,500</span> </td>
-                </tr>
-              </tbody>
+                    <tr>
+                        <td><span >{{$invoice->client->name}}</span> </td>
+                        <td><span >{{dateSlash($invoice->invoice->issue_date ?? $invoice->invoice->created_at)}}</span></td>
+                        <td> N/A</td>
+                    </tr>
+                    <tr>
+                        <td><span >{{$invoice->client->email}}</span></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td><span >{{getState($invoice->client->state_id)}}, {{getCountry($invoice->client->country_id)}}</span> </td>
+                        <th class="table-date"> Due Date</th>
+                        <th class="table-date"> Amount Due</th>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td><span >Upon completion</span> </td>
+                        <td><span  class="tableAmount">NGN {{number_format((float)$invoice->invoice->amount, 2)}}</span> </td>
+                    </tr>
+                </tbody>
             </table>
-            
-            <section class="invoice-description mt-4    ">
 
-                    <table class="table table-responsive container " style="width: 100%">
-                        <thead class="thead" style="background-color: #009FFF; color: white;">
-                            <tr>
-                                <th scope="col" class="">Description</th>
-                                <th> </th>
-                                <th></th>
-                                <th></th>
-                                <th scope="col">Quantity </th>
+            <section class="invoice-description mt-4  ">
 
-                                <th></th>
-
-                                <th scope="col">Rate </th>
-
-
-                                <th></th>
-                                <th scope="col">Amount</th>
-
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td colspan="4">Sed ut perspiciatis unde omnis iste</td>
-                                <td>1</td>
-                                <td></td>
-                                <td>NGN3500</td>
-                                <td></td>
-                                <td>NGN3500</td>
-                            </tr>
-                            <tr>
-                                <td colspan="4">Sed ut perspiciatis unde omnis iste</td>
-                                <td>10</td>
-                                <td></td>
-                                <td>NGN1700</td>
-                                <td></td>
-                                <td>NGN17000</td>
-                            </tr>
-                            <tr>
-                                <td colspan="4">Sed ut perspiciatis unde omnis iste</td>
-
-                                <td>15</td>
-                                <td></td>
-                                <td>NGN1200</td>
-                                <td></td>
-                                <td>NGN18000</td>
-                            </tr>
+                <table class="table table-responsive container " style="width: 100%">
+                    <thead class="thead bg-dark" style="color: white;">
                         <tr>
-                        <td colspan="4"></td>
+                            <th scope="col" class="">Description</th>
+                            <th> </th>
+                            <th></th>
+                            <th></th>
+                            <th scope="col">Quantity </th>
+
+                            <th></th>
+
+                            <th scope="col">Rate </th>
+
+
+                            <th></th>
+                            <th scope="col">Amount</th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td colspan="4">Man Hours</td>
+                            <td>{{$invoice->invoice->time}}</td>
+                            <td></td>
+                            <td>NGN{{number_format((float)$invoice->estimate->price_per_hour, 2)}}</td>
+                            <td></td>
+                            <td>NGN{{number_format((float)($invoice->estimate->price_per_hour * $invoice->estimate->time), 2)}}</td>
+                        </tr>
+                        <tr>
+                            <td colspan="4">Equipment Cost</td>
+                            <td>1</td>
+                            <td></td>
+                            <td>NGN{{number_format((float)$invoice->estimate->equipment_cost, 2)}}</td>
+                            <td></td>
+                            <td>NGN{{number_format((float)$invoice->estimate->equipment_cost, 2)}}</td>
+                        </tr>
+                        <tr>
+                            <td colspan="4" style="text-transform: capitalize;">{{$invoice->estimate->sub_contractors}}</td>
+
+                            <td>15</td>
+                            <td></td>
+                            <td>NGN{{number_format((float)$invoice->estimate->sub_contractors_cost, 2)}}</td>
+                            <td></td>
+                            <td>NGN{{number_format((float)$invoice->estimate->sub_contractors_cost, 2)}}</td>
+                        </tr>
+                        <tr>
+                            <td colspan="4"></td>
                             <td></td>
                             <td></td>
                             <td>Total</td>
                             <td></td>
-                            <td>NGN38500</td>
-                            </tr>
-                        </tbody>
-                        <tfoot>
-                            <tr>
-                            
-                        <td class="removeBorder" colspan="4"></td>
+                            <td>NGN{{number_format((float)$invoice->invoice->amount, 2)}}</td>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+
+                            <td class="removeBorder" colspan="4"></td>
                             <td class="removeBorder"></td>
                             <td class="removeBorder table-date" colspan="2" style="text-align: right;">Discount</td>
                             <td class="removeBorder"></td>
                             <td class="removeBorder bold">N/A</td>
-                            </tr>
-                            <tr>
-                        <td class="removeBorder" colspan="4"></td>
+                        </tr>
+                        <tr>
+                            <td class="removeBorder" colspan="4"></td>
                             <td class="removeBorder"></td>
                             <td class="thickLine bold" colspan="2" style="text-align: right;">Amount Due</td>
                             <td class="thickLine"></td>
-                            <td class="thickLine bold">NGN38500</td>
-                            </tr>
-                        </tfoot>
-                    </table>
+                            <td class="thickLine bold">NGN{{number_format((float)$invoice->invoice->amount, 2)}}</td>
+                        </tr>
+                    </tfoot>
+                </table>
             </section>
+            <p style="margin-bottom: 25px;"></p>
 
-            <section class="invoice-table" style="position: relative; top: 0rem">
-                <section class="note">
-                    <h5> Note</h5>
-                    <p> Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium dolor laudantium, totam
-                        rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi.</p>
-                </section>
-            </section>
     </div>
 </section>
 @endsection

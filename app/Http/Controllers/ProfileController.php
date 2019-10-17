@@ -189,7 +189,7 @@ class ProfileController extends Controller
 
                 $data_to_save = [];
                 foreach ($needed_data as $data) {
-                    if(isset($request->input('data'))){
+                    if(!empty($request->input('data'))){
                         $data_to_save[$data] = $request->input('data');
                     }
                 }

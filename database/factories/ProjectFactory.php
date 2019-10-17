@@ -8,7 +8,7 @@ use Faker\Generator as Faker;
 
 $factory->define(Project::class, function (Faker $faker) {
     return [
-        'user_id' => $faker->numberBetween(1, 50),
+        'user_id' => $faker->numberBetween(1, 10),
         'title' => $faker->words(2, true),
         'description' => $faker->sentence,
         'status' => $status = $faker->randomElement(['pending', 'in-progress', 'completed']),

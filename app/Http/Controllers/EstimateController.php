@@ -46,7 +46,7 @@ class EstimateController extends Controller
             'end' => 'required|date'
         ]);
 
-        $estimateCost = $request->input('price_per_hour') * $request->input('time');
+        $estimateCost = ($request->input('price_per_hour') * $request->input('time')) + $request->equipment_cost + $request->sub_contractors_cost;
 
         $estimate = Estimate::create($request->all() + ['estimate' => $estimateCost]);
 

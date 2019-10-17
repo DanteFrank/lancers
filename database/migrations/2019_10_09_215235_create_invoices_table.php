@@ -21,7 +21,7 @@ class CreateInvoicesTable extends Migration
             $table->float('amount', 15, 2);
             $table->integer('estimate_id');
             $table->float('amount_paid', 15, 2)->default(0);
-            $table->enum('status', ['paid', 'unpaid']);
+            $table->enum('status', ['unpaid', 'paid']);
             $table->integer('currency_id')->default(1);
             $table->string('filename')->nullable();
             $table->timestamps();

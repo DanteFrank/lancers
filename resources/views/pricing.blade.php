@@ -530,18 +530,18 @@
 					<div class="col-xs-12 col-sm-6 col-md-2">
 						<img src="{{ asset('images/svg/logo-dark.svg') }}" alt="" class="img img-responsive mb-2" height="30" width="auto">
 						<ul class="list-unstyled">
-							<li><a class="text-dark" href="#">Pricing</a></li>
-							<li><a class="text-dark" href="#">Sign in</a></li>
-							<li><a class="text-dark" href="#">Sign up</a></li>
+							<li><a class="text-dark" href="{{ url('/pricing') }}">Pricing</a></li>
+							<li><a class="text-dark" href="{{ url('/login') }}">Sign in</a></li>
+							<li><a class="text-dark" href="{{ url('/register') }}">Sign up</a></li>
 						</ul>
 					</div>
 					<div class="col-xs-12 col-sm-6 col-md-2">
 						<h5>Features</h5>
 						<ul class="list-unstyled">
-							<li><a class="text-dark" href="#">Dashboard</a></li>
-							<li><a class="text-dark" href="#">Projects</a></li>
-							<li><a class="text-dark" href="#">Invoices</a></li>
-							<li><a class="text-dark" href="#">Create a Project</a></li>
+							<li><a class="text-dark" href="{{ url('/dashboard') }}">Dashboard</a></li>
+							<li><a class="text-dark" href="{{ url('/projects') }}">Projects</a></li>
+							<li><a class="text-dark" href="{{ url('/invoices') }}">Invoices</a></li>
+							<li><a class="text-dark" href="{{ url('/guest/create_estimate') }}">Create a Project</a></li>
 						</ul>
 					</div>
 					<div class="col-xs-12 col-sm-6 col-md-4">

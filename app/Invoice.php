@@ -11,4 +11,8 @@ class Invoice extends Model
     public function project(){
         return $this->belongsTo('App\Project');
     }
+
+    public function estimate(){
+    	return $this->belongsTo('App\Estimate');
+    }
 }

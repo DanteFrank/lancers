@@ -264,7 +264,7 @@
 			      			<h1 class="jumbotron-heading text-dark my-5">Let us do the work for you</h1>
 					      	<p class="text-dark bold text-bold my-5">Generate estimates, invoices, contacts and much more<br> for your project</p>
 					      	<p class="text-dark my-5">
-					        	<a href="#" class="btn btn-secondary btn-lg py-2">Generate an Estimate</a>
+					        	<a href="{{ url('/guest/create_estimate') }}" class="btn btn-secondary btn-lg py-2">Generate an Estimate</a>
 					      	</p>
 			      		</div>
 			      		<div class="col-12 col-md-7 col-lg-6 order-2 aos-init aos-animate">
@@ -288,7 +288,7 @@
 			  						We take into consideration your work hours, subcontractors, among other things, to make sure you always have a healthy profit at the end of the day
 			  					</p>
 			  					<p class="text-dark my-4">
-						        	<a href="#" class="btn btn-secondary btn-lg py-2">Generate an Estimate</a>
+						        	<a href="{{ url('/guest/create_estimate') }}" class="btn btn-secondary btn-lg py-2">Generate an Estimate</a>
 						      	</p>
 		  					</div>
 		  				</div>
@@ -348,18 +348,18 @@
 					<div class="col-xs-12 col-sm-6 col-md-2">
 						<img src="{{ asset('images/svg/logo-dark.svg') }}" alt="" class="img img-responsive mb-2" height="30" width="auto">
 						<ul class="list-unstyled">
-							<li><a class="text-dark" href="#">Pricing</a></li>
-							<li><a class="text-dark" href="#">Sign in</a></li>
-							<li><a class="text-dark" href="#">Sign up</a></li>
+							<li><a class="text-dark" href="{{ url('/pricing') }}">Pricing</a></li>
+							<li><a class="text-dark" href="{{ url('/login') }}">Sign in</a></li>
+							<li><a class="text-dark" href="{{ url('/register') }}">Sign up</a></li>
 						</ul>
 					</div>
 					<div class="col-xs-12 col-sm-6 col-md-2">
 						<h5>Features</h5>
 						<ul class="list-unstyled">
-							<li><a class="text-dark" href="#">Dashboard</a></li>
-							<li><a class="text-dark" href="#">Projects</a></li>
-							<li><a class="text-dark" href="#">Invoices</a></li>
-							<li><a class="text-dark" href="#">Create a Project</a></li>
+							<li><a class="text-dark" href="{{ url('/dashboard') }}">Dashboard</a></li>
+							<li><a class="text-dark" href="{{ url('/projects') }}">Projects</a></li>
+							<li><a class="text-dark" href="{{ url('/invoices') }}">Invoices</a></li>
+							<li><a class="text-dark" href="{{ url('/guest/create_estimate') }}">Create a Project</a></li>
 						</ul>
 					</div>
 					<div class="col-xs-12 col-sm-6 col-md-4">
@@ -397,4 +397,3 @@
 			</div>
 		</footer>
 @stop
-

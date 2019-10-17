@@ -9,11 +9,48 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 use App\User;
+use App\Client;
 use App\Profile;
 use App\Subscription;
 
 class AuthController extends Controller
 {
+    public function create_password(Request $request){
+        // Confirm client email exists and is not an existing user
+        $request->validate([
+            'password' => 'required|string|confirmed'
+        ]);
+        $isUser = User::whereEmail($request->email)->first();
+        if($isUser) return view('auth.login');   
+        
+        $client = Client::whereEmail($request->email)->first();
+        if($client){
+            $fname = explode(" ", $client->name);
+            DB::beginTransaction();
+            try{
+                $user = User::create(['name' => $client->name, 'email' => $request->email, 'password' => bcrypt($request->password)]);
+                
+                $subscriber = new Subscription;
+                $subscriber->subscribeToPlan(1 , $user->id, 12);
+
+                // $tokenResult = $user->createToken('Personal Access Token');
+                // $token = $tokenResult;
+
+                DB::commit();
+            }catch (\Throwable $e) {
+                DB::rollback();
+                return  back()->withErrors('Account creation failed: '. $e->getMessage());
+                // return $this->ERROR($e);
+            }
+            if(Auth::attempt(['email'=>$request->email, 'password'=>$request->password]))
+            return redirect()->intended('dashboard');
+            
+            return view('auth.login')->with(['success'=>'Account created!']);
+            // return $this->SUCCESS('Successfully created user', ['access_token' => $token->accessToken, 'expires_in'=>strtotime($token->token->expires_at)- time(), 'user' => $user]);
+        }
+        else return back()->withErrors('Record not found. Please <a href="/register">click here</a> to register');        
+    }
+
     public function login(Request $request){
         //logic for logging in with username or email, and password.
         if(
@@ -175,15 +212,17 @@ class AuthController extends Controller
 
 
     public function logout(){
-        $accessToken = Auth::user()->token();
-        DB::table('oauth_refresh_tokens')
-            ->where('access_token_id', $accessToken->id)
-            ->update([
-                'revoked' => true
-            ]);
+        Auth::logout();
+        return redirect('/login');
+        // $accessToken = Auth::user()->token();
+        // DB::table('oauth_refresh_tokens')
+        //     ->where('access_token_id', $accessToken->id)
+        //     ->update([
+        //         'revoked' => true
+        //     ]);
 
-        $accessToken->revoke();        
-        return $this->SUCCESS('You are successfully logged out');
+        // $accessToken->revoke();        
+        // return $this->SUCCESS('You are successfully logged out');
     }
 
     public function clear_session(){

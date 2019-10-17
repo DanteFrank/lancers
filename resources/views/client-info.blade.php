@@ -946,152 +946,69 @@ color: #A6A6A6;
 }
 </style>
 
-<section class="invoice-body m-auto">
-    <div class="container">
-        <div class="row mt-5 px-3">
-            <button type="button" class="btn btn-outline-dark ">Print</button>
-            <a href="{{URL::to('/invoice/pdf')}}" class="btn btn-outline-dark ml-4">Download as PDF </a>
-            <button type="button" class="btn btn-outline-dark ml-auto">Edit</button>
-            <button type="button" class="btn btn-secondary ml-4">Other actions</button>
+<div class="container">
+   
+    <button class="box1">
+    <div id="edit">Edit</div>
+    </button>
+    <button class= "box2">
+    <div id="delete">Delete</div>
+    </button>
+</section>
+
+<section class="client-info">
+        <div id="contact">Contact</div>
+
+    <div class="name">
+        <div id="nme">Name</div>
+        <div id="john">John Doe</div>
+        
+        <div id= "add">
+        <div id="mail">Email Address</div>
+        <div id="gmail">Johndoe@gmail.com</div>
+        </div>
+        
+        <div id="numb">
+        <div id="phone">Phone Number</div>
+        <div id="number">+2348064528518</div>
         </div>
     </div>
-</section>
 
-<section class="invoice-main">
-    <div class="container m-auto invoice-container shadow">
-        <section id="showcase ">
-            <div class="row container pt-3 ">
-                <div class="col-6 mb-4">
-                    <h1> Invoice </h1>
-                    <address contenteditable="">
-                        <p> <b>Project:</b> branding and marketing</p>
-                        <p> <b>Lancer:</b> Endurance dan-jumbo</p>
-                        <p> <b>Email:</b> Edanjumbo@gmail.com</p>
-                        <p> <b>Address:</b> Accra, Ghana</p>
-                    </address>
-                </div>
-
-                <div class="col-6">
-                    <img src="https://res.cloudinary.com/samtech/image/upload/v1570725037/My_Logo_-_Black.png"
-                        class="img-fluid logo-img">
-                </div>
-            </div>
-            <table class="table-responsive" style="width: 100%">
-                <thead>
-                    <tr>
-                        <th> Bill to</th>
-                        <th> Issue Date </th>
-                        <th> Hourly Rate</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td><span contenteditable="">John Doe</span> </td>
-                        <td><span contenteditable=""> 18th September 2019</span></td>
-                        <td> N/A</td>
-                    </tr>
-                    <tr>
-                        <td><span contenteditable="">Johndoe@gmail.com</span></td>
-                        <td></td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td><span contenteditable="">Accra, Ghana</span> </td>
-                        <th class="table-date"> Due Date</th>
-                        <th class="table-date"> Amount Due</th>
-                    </tr>
-                    <tr>
-                        <td></td>
-                        <td><span contenteditable="">28th September 2019</span> </td>
-                        <td><span contenteditable="" class="tableAmount">NGN 38,500</span> </td>
-                    </tr>
-                </tbody>
-            </table>
-
-            <section class="invoice-description mt-4  ">
-
-                <table class="table table-responsive container " style="width: 100%">
-                    <thead class="thead bg-dark" style="color: white;">
-                        <tr>
-                            <th scope="col" class="">Description</th>
-                            <th> </th>
-                            <th></th>
-                            <th></th>
-                            <th scope="col">Quantity </th>
-
-                            <th></th>
-
-                            <th scope="col">Rate </th>
-
-
-                            <th></th>
-                            <th scope="col">Amount</th>
-
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td colspan="4">Sed ut perspiciatis unde omnis iste</td>
-                            <td>1</td>
-                            <td></td>
-                            <td>NGN3500</td>
-                            <td></td>
-                            <td>NGN3500</td>
-                        </tr>
-                        <tr>
-                            <td colspan="4">Sed ut perspiciatis unde omnis iste</td>
-                            <td>10</td>
-                            <td></td>
-                            <td>NGN1700</td>
-                            <td></td>
-                            <td>NGN17000</td>
-                        </tr>
-                        <tr>
-                            <td colspan="4">Sed ut perspiciatis unde omnis iste</td>
-
-                            <td>15</td>
-                            <td></td>
-                            <td>NGN1200</td>
-                            <td></td>
-                            <td>NGN18000</td>
-                        </tr>
-                        <tr>
-                            <td colspan="4"></td>
-                            <td></td>
-                            <td></td>
-                            <td>Total</td>
-                            <td></td>
-                            <td>NGN38500</td>
-                        </tr>
-                    </tbody>
-                    <tfoot>
-                        <tr>
-
-                            <td class="removeBorder" colspan="4"></td>
-                            <td class="removeBorder"></td>
-                            <td class="removeBorder table-date" colspan="2" style="text-align: right;">Discount</td>
-                            <td class="removeBorder"></td>
-                            <td class="removeBorder bold">N/A</td>
-                        </tr>
-                        <tr>
-                            <td class="removeBorder" colspan="4"></td>
-                            <td class="removeBorder"></td>
-                            <td class="thickLine bold" colspan="2" style="text-align: right;">Amount Due</td>
-                            <td class="thickLine"></td>
-                            <td class="thickLine bold">NGN38500</td>
-                        </tr>
-                    </tfoot>
-                </table>
-            </section>
-
-            <section class="invoice-table" style="position: relative; top: 0rem">
-                <section class="note">
-                    <h5> Note</h5>
-                    <p> Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium dolor laudantium,
-                        totam
-                        rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi.</p>
-                </section>
-            </section>
+        <div id="billing">Billing Information</div>
+    
+    <div class="curr">
+        <div id="currency">Currency</div>
+        <div id="ngn">NGN</div>
+        
+        <div id= "home">
+        <div id="address">Address</div>
+        <div id="lorem">Lorem Ipsum Dolor Set</div>
+        </div>
+        
+        <div id="place">
+        <div id="city">City</div>
+        <div id="abuja">Abuja</div>
+        </div>
     </div>
+
+    <div class="cde">
+        <div id="zip">Zip Code</div>
+        <div id="code">234</div>
+        
+        <div id= "count">
+        <div id="country">Country</div>
+        <div id="nigeria">Nigeria</div>
+        </div>
+        
+        <div id="st">
+        <div id="state">State</div>
+        <div id="abj">Abuja</div>
+        </div>
+    </div>
+
+    <div id="more">More</div>
+    <div id="na">N/A</div>
 </section>
+</div> 
+
 @endsection

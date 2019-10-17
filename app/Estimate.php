@@ -23,4 +23,9 @@ class Estimate extends Model
 
     protected $guarded = ['id'];
 
+    public function invoice()
+    {
+        return $this->hasOne('App\Invoice');
+    }
+
 }

@@ -89,7 +89,10 @@
                     <div class="form-group">
                         <label for="my-email">Email Address</label>
                         <input id="email" placeholder="eg. johndoe@example.com" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email" autofocus>
-                        <span  id="emessage"></span>
+                        @if (session('success'))
+                        <span  id="emessage">{{session('success')}}</span>
+                        @endif
+
                         @error('email')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>

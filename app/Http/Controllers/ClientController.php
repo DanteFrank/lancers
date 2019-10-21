@@ -4,25 +4,50 @@ namespace App\Http\Controllers;
 
 use Auth;
 use App\User;
+use App\State;
 use App\Client;
 use App\Project;
+use App\Country;
 use App\Estimate;
 use Illuminate\Http\Request;
 
 class ClientController extends Controller
 {
+    public function show(){
+        $countries = Country::all('id', 'name');
+        $states = State::all('id', 'name');
+        return view('clients.add')->withCountries($countries)->withStates($states);
+    }
+
     public function store(Request $request){
-        $data = $request->all();
-        // $validation = Validation::clients($data);
-        // if(!$validation) return $this->ERROR('Form validation failed', $validation);
-        try{
-            if(Client::create($data)){
-                logger('New client created - ' . $data['name']);
-                return $this->SUCCESS('New client created', $data);
+        $contacts = [];
+        if($request->contact){
+            foreach($request->contact as $contact){
+                array_push($contacts, ["name"=>$contact["'name'"], "email"=>$contact["'email'"] ]);
             }
-            return $this->ERROR('Client creation failed');
+            $contacts = json_encode($contacts);
+        }
+        try{
+            $client = new Client;
+            $client->user_id = Auth::user()->id;
+            $client->name = $request->name;
+            $client->email = $request->email;
+            $client->street = $request->street;
+            $client->street_number = $request->street_number;
+            $client->city = $request->city;
+            $client->country_id = $request->country_id;
+            $client->state_id = $request->state_id;
+            $client->zipcode = $request->zipcode;
+            if(gettype($contacts) == 'string'){
+                $client->contacts = $contacts;
+            };
+            if($client->save()){
+                return back()->with('success', 'New client created');
+                // return $this->SUCCESS('New client created', $data);
+            }
         }catch(\Throwable $e){
-            return $this->ERROR('Client creation failed', $e);
+            return back()->with('error', $e->getMessage());
+            // return $this->ERROR('Client creation failed');
         }
     }
 
@@ -53,13 +78,9 @@ class ClientController extends Controller
 
     public function list(){
         $user = Auth::user();
-        $clients = $user->clients()->select('id','name','contacts','profile_picture')->with('project:title,status')->paginate(10);
-
-        // $user = User::find(1);
-        // return $users->projects()->clients()->;
-        
-        // $client = Client::where('user_id', Auth::user()->id)->paginate(10);
-        return $clients !== null ? $this->SUCCESS('Client retrieved', $clients) : $this->SUCCESS('No client found');
+        $clients = $user->clients()->select('id','name','contacts','profile_picture')->with('project:title,status')->get();
+        return view('clients.list')->withClients($clients);
+        // return $clients !== null ? $this->SUCCESS('Client retrieved', $clients) : $this->SUCCESS('No client found');
     }
 
     public function view($client_id){

@@ -15,6 +15,9 @@ class ContactMessageController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+           public function __construct(){
+        $this->middleware('auth');
+    }
 
     public function index()
     {
@@ -34,7 +37,23 @@ class ContactMessageController extends Controller
 
     }
 
+public function process_contact_form(Request $request)
+    {
 
+       $message = new ContactMessage;
+
+      $request->validate(["contents"=>"required","subject"=>"required"],["contents.required" => "Content Field is Required","subject.required"=> "Subject Field is required"]);
+
+
+       $message->user_id = Auth::User()->id;
+       $message->message =  $request->contents;
+       $message->subject = $request->subject;
+       $message->save();
+
+       //$data["success"] =;
+       return redirect('/contact')->with(["success" => "Message Set Successfully"]);
+
+    }
     public function store(Request $request)
     {
 

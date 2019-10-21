@@ -242,7 +242,7 @@
             <div>
                 <a class="btn est" id="est_content" href="#">Create Estimate</a> <br>
                 <h2><p class = "pad">Estimates helps you place value to your work and time!</p></h2>
-                <p class = "pad"><h5 class = "pad">Create and estimate and easily convert it to your invoice and send to your client</h5></p>
+                <p class = "pad"><h5 class = "pad">Create an estimate and easily convert it to your invoice and send to your client</h5></p>
             </div>
         </section>
     </div>

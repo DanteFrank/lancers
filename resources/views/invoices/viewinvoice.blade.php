@@ -431,11 +431,11 @@
 <section class="invoice-body m-auto">
     <div class="container">
         <div class="mt-5 px-3">
-{{--             <button type="button" class="btn btn-outline-dark ">Print</button>
-            <a href="{{URL::to('/invoice/pdf')}}" class="btn btn-outline-dark ml-4">Download as PDF </a>
+            <button type="button" class="btn btn-outline-dark ">Send Invoice</button>
+{{--             <a href="{{URL::to('/invoice/pdf')}}" class="btn btn-outline-dark ml-4">Download as PDF </a>
             <button type="button" class="btn btn-outline-dark ml-auto">Edit</button>
             <button type="button" class="btn btn-secondary ml-4">Other actions</button> --}}
-            <a href="{{URL::to('/invoices/'.$invoice->invoice->id.'/getpdf')}}" class="btn btn-secondary ml-4 float-right">Download as PDF </a>
+            <a href="{{URL::to('/invoices/'.$invoice->invoice->id.'/getpdf')}}" class="btn btn-secondary ml-4 ml-auto">Download as PDF </a>
             <div class="clearfix"></div>
         </div>
     </div>

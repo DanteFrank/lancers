@@ -240,9 +240,9 @@
 @section('content')
         <section id="new_user">
             <div>
-                <a class="btn est" id="est_content" href="{{ url('/guest/create_project') }}">Create Estimate</a> <br>
+                <a class="btn est" id="est_content" href="#">Create Estimate</a> <br>
                 <h2><p class = "pad">Estimates helps you place value to your work and time!</p></h2>
-                <p class = "pad"><h5 class = "pad">Create and estimate and easily convert it to your invoice and send to your client</h5></p>
+                <p class = "pad"><h5 class = "pad">Create an estimate and easily convert it to your invoice and send to your client</h5></p>
             </div>
         </section>
     </div>
@@ -279,6 +279,8 @@
    
    
            <div class="cree">
+           <form method="POST" action="{{ url('/guest/project/create') }}">
+                        @csrf
                    <div class="lists glacier">
                        <div class="box">
                             <h3 class="first-head">A new project</h3>
@@ -287,13 +289,13 @@
                             </p>
                        </div>
                       
-                       <div class="contents project">
-                           <input class="l-proj" type="text" onmouseout="verifyPath()" placeholder= "Project Name" name="" id="createProject">
+                        <div class="contents project">
+                           <input class="l-proj" type="text" onmouseout="verifyPath()" placeholder= "Project Name" name="title" id="createProject">
                            <br>
                            <span class="req">Required</span></div>
        
-                   </div>
-               </div>
+                        </div>
+                    </div>
                <button class="a-next disabled"><a href="#">NEXT</a></button>
        </section>
     </div>

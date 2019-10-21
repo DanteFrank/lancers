@@ -20,8 +20,12 @@ class Estimate extends Model
     //     'end',
     // ];
 
-
     protected $guarded = ['id'];
+    
+    public function projects()
+    {
+        return $this->belongsTo('App\Project');
+    }
 
     public function invoice()
     {

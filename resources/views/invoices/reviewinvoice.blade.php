@@ -20,7 +20,11 @@
                 Invoice
             </div>
             <div class="box-5">
-                <a href="#"><button class="sendInvoice">SEND</button></a>
+                <form method="POST" action="/invoices/send">
+                    @csrf
+                    <input type="text" style="display: none;" name="invoice" value="{{$invoice->id}}">
+                    <a href="#"><button class="sendInvoice">SEND</button></a>
+                </form>
             </div>
         </header>
 
@@ -41,7 +45,11 @@
                 Invoice
             </div>
             <div class="box-5" style="max-width: 150px">
-                <a href="#"><button class="sendInvoice">SEND INVOICE</button></a>
+                <form method="POST" action="/invoices/send">
+                    @csrf
+                    <input type="text" style="display: none;" name="invoice" value="{{$invoice->id}}">
+                    <a href="#"><button class="sendInvoice">SEND INVOICE</button></a>
+                </form>
             </div>
         </header>
         <main>
@@ -66,7 +74,7 @@
                             <div class="card addressCard" style="font-weight: normal">
                                 <div style="font-weight: bold">{{$invoice->project->client->name}}</div>
                                 {{$invoice->project->client->city}}, {{getState($invoice->project->client->state_id)}}<br>
-                                {{getState($invoice->project->client->country_id)}}
+                                {{getCountry($invoice->project->client->country_id)}}
                             </div>
 
                             <div class="card payment ml-auto">

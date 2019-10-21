@@ -13,19 +13,19 @@ class DataController extends Controller
     {
     	$countries = Country::select('id', 'name')->get();
 
-        return $this->SUCCESS($countries);
+        return $this->SUCCESS('', $countries);
     }
 
     public function states($id){
     	$states = State::where('country_id', $id)->select('id', 'name')->get();
 
-        return $this->SUCCESS($states);
+        return $this->SUCCESS('', $states);
     }
 
     public function currencies()
     {
     	$currencies = Currency::select('id','code')->get();
 
-        return $this->SUCCESS("", $currencies);
+        return $this->SUCCESS('', $currencies);
     }
 }

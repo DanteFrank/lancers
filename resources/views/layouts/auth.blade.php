@@ -294,7 +294,7 @@ a.article:hover {
     Table
 ----------------------------------------------------- */
 table.project-table{
-  border-collapse:separate; 
+  border-collapse:separate;
   border-spacing: 0 1em;
 }
 
@@ -304,7 +304,7 @@ table.project-table tbody tr{
 
 table.project-table tbody tr td span.text-small{
   font-size: 8px;
-} 
+}
 
 table.project-table tbody tr td, table.project-table thead tr th {
     max-width: 200px;
@@ -350,12 +350,14 @@ table.project-table tbody tr td, table.project-table thead tr th {
 
 
 @section('content')
-    
+
 <div class="wrapper">
     <!-- Side Nav -->
     <nav id="sidebar">
         <div class="sidebar-header">
-            <img src="https://lancer-app.000webhostapp.com/images/svg/Lancers.svg" height="35" width="auto" class="img img-responsive">
+
+            <a href="{{ url('dashboard') }}"><img src="https://lancer-app.000webhostapp.com/images/svg/Lancers.svg" height="35" width="auto" class="img img-responsive"></a>
+
         </div>
         <ul class="list-unstyled components">
             <li class=" @if(request()->path() == 'dashboard') active @endif">
@@ -363,16 +365,18 @@ table.project-table tbody tr td, table.project-table thead tr th {
                     <img src="https://lancer-app.000webhostapp.com/images/svg/home.svg" height="20" width="auto"> <span> Dashboard</span></a>
             </li>
             <li class=" @if(request()->path() == 'client') active @endif">
-                <a href="{{url('client')}}">
+                <a href="{{url('clients')}}">
                     <img src="https://lancer-app.000webhostapp.com/images/svg/customer.svg" height="20" width="auto"> <span> Client</span>
                 </a>
             </li>
-            <li class="@if(request()->path() == 'project/status') active @endif">
+           
+            <li class="@if(request()->path() == 'projects/status') active @endif">
                 <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><img src="https://lancer-app.000webhostapp.com/images/svg/lightbulb.svg" height="20" width="auto"> <span> Projects</span></a>
                 <ul class="collapse list-unstyled " id="homeSubmenu">
                     <li>
                         <a href="{{url('project/status')}}" class="pl-4"><i class="fas fa-dot-circle"></i> Status</a>
                     </li>
+            
                     <li>
                         <a href="{{url('project/overview')}}" class="pl-4"><i class="fas fa-dot-circle"></i> Overview</a>
                     </li>
@@ -385,16 +389,16 @@ table.project-table tbody tr td, table.project-table thead tr th {
                     <li>
                         <a href="{{url('project/documents')}}" class="pl-4"><i class="fas fa-dot-circle"></i> Documents</a>
                     </li>
-                    
+
                 </ul>
             </li>
-            <li class="@if(request()->path() == 'invoice') active @endif">
-                <a href="{{url('invoice')}}">
+            <li class="@if(request()->path() == 'invoices') active @endif">
+                <a href="{{url('invoices')}}">
                     <img src="https://lancer-app.000webhostapp.com/images/svg/approve-invoice.svg" height="20" width="auto"> <span> Invoice</span>
                 </a>
             </li>
             <li>
-                <a href="{{url('contract')}}">
+                <a href="{{url('contracts')}}">
                     <img src="https://lancer-app.000webhostapp.com/images/svg/policy.svg" height="20" width="auto"> <span> Contract</span>
                 </a>
             </li>
@@ -403,7 +407,13 @@ table.project-table tbody tr td, table.project-table thead tr th {
                     <img src="https://lancer-app.000webhostapp.com/images/svg/approval.svg" height="20" width="auto"> <span> Proposals</span>
                 </a>
             </li>
+                     <li class="@if(request()->path() == url('/dashboard/profile/settings')) active @endif">
+                <a href="{{ url('/dashboard/profile/settings') }}">
+                    <img src="https://lancer-app.000webhostapp.com/images/svg/approval.svg" height="20" width="auto"> <span> Settings</span>
+                </a>
+            </li>
         </ul>
+
     </nav>
 
 
@@ -418,7 +428,7 @@ table.project-table tbody tr td, table.project-table thead tr th {
                     <span></span>
                     <span></span>
                 </button>
-                
+
                 <form class="form-inline my-2 ml-4">
                     <div class="input-group">
                         <div class="input-group-prepend">
@@ -430,20 +440,22 @@ table.project-table tbody tr td, table.project-table thead tr th {
                 <button class="btn btn-dark d-inline-block d-lg-none ml-auto" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                     <i class="fas fa-align-justify"></i>
                 </button>
-                
+
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="nav navbar-nav ml-auto">
                         <li class="nav-item active">
-                            <a class="nav-link p-3" href="#"><img src="https://lancer-app.000webhostapp.com/images/svg/help.svg" height="25" width="auto"> <span class="d-lg-none d-xl-none"> You need help?</span></a>
+                            <a class="nav-link p-3" href="{{ url('/contact') }}"><img src="https://lancer-app.000webhostapp.com/images/svg/help.svg" height="25" width="auto"> <span class="d-lg-none d-xl-none"> You need help?</span></a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link border-left p-3" href="#"><img src="https://lancer-app.000webhostapp.com/images/svg/alarm-clock.svg" height="25" width="auto"> <span class="d-lg-none d-xl-none"> Reminder</span></a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link border-left p-3" href="#"><img src="https://lancer-app.000webhostapp.com/images/svg/notification.svg" height="25" width="auto"> <span class="d-lg-none d-xl-none"> Notification</span></a>
+                            <a class="nav-link border-left p-3" href="/notifications"><img src="https://lancer-app.000webhostapp.com/images/svg/notification.svg" height="25" width="auto"> <span class="d-lg-none d-xl-none"> Notification</span></a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link border-left p-3" href="#"><span class="border rounded-circle p-1 font-weight-bold">AU</span> <span class="d-lg-none d-xl-none"> Hello John</span></a>
+                            <a class="nav-link border-left p-3" href="/dashboard/profile/settings"><span class="border rounded-circle p-1 font-weight-bold">
+                                {{strtoupper(explode(" ", auth()->user()->name)[0][0])}}
+                            </span> <span class="d-lg-none d-xl-none"> Hello {{explode(" ", auth()->user()->name)[0]}}</span></a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link p-3" href="{{url('/logout')}}" ><i class="fas fa-sign-out-alt"></i> <span class="d-lg-none d-xl-none"> Logout</span></a>
@@ -456,5 +468,9 @@ table.project-table tbody tr td, table.project-table thead tr th {
         @yield('main-content')
     </div>
 
-</div> 
+</div>
+
+<!-- Inject other content after wrapper div -->
+@yield('others')
+
 @endsection

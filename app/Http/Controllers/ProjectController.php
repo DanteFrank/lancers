@@ -10,6 +10,32 @@ use Illuminate\Http\Request;
 
 class ProjectController extends Controller
 {
+    /**
+     * NEW PROJECT IMPLEMENTATION STARTS
+     */
+
+    public function list(){
+        $filter = Request()->filter ?? false;
+        if($filter && !in_array($filter, ['all', 'pending', 'completed', 'active'])) $filter = false;
+        $filter == 'active' ? $filter = 'in-progress' : $filter = $filter;
+
+        $projects = Project::join('estimates AS e', 'e.id', 'projects.estimate_id')
+                    ->leftjoin('invoices AS i', 'i.project_id', 'projects.id')
+                    ->leftjoin('currencies AS ic', 'i.currency_id', 'ic.id')
+                    ->leftjoin('currencies AS ec', 'e.currency_id', 'ec.id')
+                    ->where('projects.user_id', Auth::user()->id);
+        
+        if($filter && $filter !== 'all') $projects = $projects->where('projects.status', $filter);
+        
+        $projects = $projects->select('projects.*', 'e.start', 'e.end', 'ec.symbol AS estimate_currency', 'ic.symbol AS invoice_currency', 'i.amount', 'i.amount_paid')
+                    ->get();
+        
+        return view('projects.list')->withProjects($projects);
+    }
+
+    /**
+     * NEW PROJECT IMPLEMENTATION ENDS
+     */
 
     public function index()
     {
@@ -17,7 +43,7 @@ class ProjectController extends Controller
 
         $projects = $user->projects()->select('id','title', 'status', 'created_at')->with(['estimate:project_id,start,end,estimate', 'invoice:project_id,amount,amount_paid'])->get();
 
-        // return $projects;
+        // return $projects, and not json verified by @BlinShine
         if($projects){
             return $this->SUCCESS("project retrieved", $projects);
         }
@@ -30,7 +56,7 @@ class ProjectController extends Controller
 
         $projects = $user->projects()->select('id','title')->get()->toArray();
 
-        // return $projects;
+        // return $projects, instead of json verified by @BlinShine
         if($projects){
             return $this->SUCCESS("Projects retrieved", $tasks);
         }

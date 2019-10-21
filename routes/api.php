@@ -93,7 +93,7 @@ Route::post('tasks/{task}/team', 'TaskController@addTeam');
 Route::resource('templates', 'TemplateController');
 
 // Document API routes
-Route::resource('documents', 'DocumentController');
+// Route::resource('documents', 'DocumentController');
 
 Route::get('documents','DocumentsController@index');
 Route::get('documents/{id}','DocumentsController@show');

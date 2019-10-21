@@ -47,9 +47,15 @@
         background-color: #0ABAB5;
         color: #FFFFFF;
         border: 0;
-        width: 332px;
-        height: 98px;
+        padding: 20px 30px;
         font-size: 28px;
+        text-decoration: none;
+    }
+
+    .invBtn:hover{
+        color: #FFFFFF;
+        text-decoration: none;
+        box-shadow: 0 2px 7px rgba(0,0,0,0.15);
     }
 
     h3 {
@@ -86,6 +92,6 @@
     </div>
 
     <div class="side">  
-        <button class="invBtn">VIEW INVOICES</button>
+        <button class="invBtn" onClick="window.location.href='/invoices'">VIEW INVOICES</button>
     </div>
 @endsection

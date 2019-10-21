@@ -43,7 +43,7 @@ class emailsettingsController extends Controller
     function index()
     {
         //get user emails using relationships between user model and email settings model
-        $userEmails = User::where('id',auth()->user()->toArray()['id'])->find(1)->emailsetting()->get();
+        $userEmails = User::where('id',auth()->user()->toArray()['id'])->first()->emailsetting()->get();
 
         if($userEmails)
         {
@@ -51,18 +51,18 @@ class emailsettingsController extends Controller
             $collectionResult = $userEmails->toArray();
             if(sizeof($collectionResult) != 0)
             {
-                return view('emailsettings')->with(['status'=> 'success','data'=>$collectionResult[0]]);
+                return view('settings_email')->with(['status'=> 'success','data'=>$collectionResult[0]]);
             }
             else
             {
-                return view('emailsettings')->with(['status'=> 'failure','data'=>null]);
+                return view('settings_email')->with(['status'=> 'failure','data'=>null]);
 
             }
 
         }
         else
         {
-            return view('emailsettings')->with(['status'=> 'failure','data'=>null]);
+            return view('settings_email')->with(['status'=> 'failure','data'=>null]);
         }
 
     }
@@ -83,20 +83,39 @@ class emailsettingsController extends Controller
         {
             //get user via email settings model and perform update
             $userEmailsDetails = EmailSetting::where('user_id',auth()->user()->toArray()['id'])->first();
+            if($userEmailsDetails == null)
+            {
+                $saveEmailSettings = EmailSetting::create([
+                    'user_id' => auth()->user()->id,
+                    'auto_invoice_message' => $request->input('invoice'),
+                    'auto_approval_message' =>$request->input('proposal'),
+                    'auto_agreement_message' => $request->input('agreement')
+                        ]);
+
+                if($saveEmailSettings)
+                {
+                    return redirect('/dashboard/emails/settings')->with('editSuccess','Email Settings updated successfully!');
+                }
+                else
+                {
+                    return redirect('/dashboard/emails/settings')->with('editFailure','Email Settings not updated successfully!');
+                }
+
+            }
 
             $userEmailsDetails->auto_invoice_message = $request->input('invoice');
-            $userEmailsDetails->auto_proposal_message = $request->input('proposal');
+            $userEmailsDetails->auto_approval_message = $request->input('proposal');
             $userEmailsDetails->auto_agreement_message = $request->input('agreement');
             $userEmailsDetails->save();
 
             //check if update was successful and return message
             if($userEmailsDetails)
             {
-                return redirect('/users/settings/emails')->with('editSuccess','Email Settings updated successfully!');
+                return redirect('/dashboard/emails/settings')->with('editSuccess','Email Settings updated successfully!');
             }
             else
             {
-                return redirect('/users/settings/emails')->with('editFailure','Email Settings not updated successfully!');
+                return redirect('/dashboard/emails/settings')->with('editFailure','Email Settings not updated successfully!');
             }
 
         }
@@ -136,7 +155,7 @@ class emailsettingsController extends Controller
 
             }
 
-          return redirect('/users/settings/emails')->with('editErrors',$errorString);
+          return redirect('/dashboard/emails/settings')->with('editErrors',$errorString);
 
         }
 

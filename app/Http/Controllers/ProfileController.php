@@ -16,6 +16,7 @@ use App\Currency;
 use App\Country;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Hash;
 
 use Illuminate\Support\Facades\Validator;
 
@@ -27,8 +28,7 @@ class ProfileController extends Controller
      */
     function index()
     {
-        $user = Auth::user();
-        //get country id
+       //get country id
         //get state id
         //get currency id
         $countryValue = Country::all()->toArray();
@@ -36,37 +36,41 @@ class ProfileController extends Controller
         $stateValue = State::all()->toArray();
 
         //Get user profile details
-        $userProfile =  $user->profile;
+        $userProfile = Profile::where('user_id',auth()->user()->id)->first();
 
         //check if collection is null similar to mysqli num ros
         if($userProfile != null)
         {
-            if((sizeof($userProfile->toArray()) > 0))
+            if(sizeof($userProfile->toArray()) > 0)
             {
-                $detials = $userProfile->toArray();
+                $details = $userProfile->toArray();
 
-                $country = Country::where('id',$detials['country_id'])->first()->toArray()['name'];
-                $currency = Currency::where('id',$detials['currency_id'])->first()->toArray()['name'];
-                $state = State::where('id',$detials['state_id'])->first()->toArray()['name'];
+                if($details['company_name'] == null)
+                {
+                    return view('settings_profile',['data' => [$countryValue,$currencyValue,$stateValue,$details]]);
+                }
+
+                $country = Country::where('id',$details['country_id'])->first()->toArray()['name'];
+                $currency = Currency::where('id',$details['currency_id'])->first()->toArray()['name'];
+                $state = State::where('id',$details['state_id'])->first()->toArray()['name'];
 
                 //change values in array
 
-                $detials['country_id'] = $country;
-                $detials['currency_id'] = $currency;
-                $detials['state_id'] = $state;
+                $details['country_id'] = $country;
+                $details['currency_id'] = $currency;
+                $details['state_id'] = $state;
 
-                return view('profile',['data' => [$countryValue,$currencyValue,$stateValue,$detials]]);
+                return view('settings_profile',['data' => [$countryValue,$currencyValue,$stateValue,$details]]);
             }
             else
             {
-                return view('profile',['data' => [$countryValue,$currencyValue,$stateValue,null]]);
+                return view('settings_profile',['data' => [$countryValue,$currencyValue,$stateValue,null]]);
             }
         }
         else
         {
-            return view('profile',['data' => [$countryValue,$currencyValue,$stateValue,null]]);
+            return view('settings_profile',['data' => [$countryValue,$currencyValue,$stateValue,null]]);
         }
-
 
 
 
@@ -85,21 +89,21 @@ class ProfileController extends Controller
         //check if collection is null similar to mysqli num ros
         if($userProfile != null)
         {
-            if((sizeof($userProfile->toArray()) > 0) && ($userProfile->toArray()['first_name'] != 'none'))
+            if((sizeof($userProfile->toArray()) > 0) && ($userProfile->toArray()['company'] != null))
             {
-                $detials = $userProfile->toArray();
+                $details = $userProfile->toArray();
 
-                $country = Country::where('id',$detials['country_id'])->first()->toArray()['name'];
-                $currency = Currency::where('id',$detials['currency_id'])->first()->toArray()['name'];
-                $state = State::where('id',$detials['state_id'])->first()->toArray()['name'];
+                $country = Country::where('id',$details['country_id'])->first()->toArray()['name'];
+                $currency = Currency::where('id',$details['currency_id'])->first()->toArray()['name'];
+                $state = State::where('id',$details['state_id'])->first()->toArray()['name'];
 
                 //change values in array
 
-                $detials['country_id'] = $country;
-                $detials['currency_id'] = $currency;
-                $detials['state_id'] = $state;
+                $details['country_id'] = $country;
+                $details['currency_id'] = $currency;
+                $details['state_id'] = $state;
 
-                return view('user_profile',['data' => [$detials]]);
+                return view('user_profile',['data' => [$details]]);
             }
             else
             {
@@ -115,6 +119,12 @@ class ProfileController extends Controller
     }
 
 
+/*$messages = [
+    'required' => 'The :attribute field is required.',
+];
+
+$validator = Validator::make($input, $rules, $messages);
+*/
 
     protected function validatorId(array $data)
     {
@@ -126,25 +136,44 @@ class ProfileController extends Controller
     protected function validator(array $data)
     {
         return Validator::make($data, [
-        'first_name' => ['required', 'string', 'max:255'],
-        'last_name' => ['required', 'string', 'max:255'],
-        'title' => ['nullable', 'string', 'max:255'],
-        'company_name' => ['nullable', 'string', 'max:255'],
-        'company_email' => ['nullable', 'email', 'max:255'],
-        'company_address' => ['nullable', 'string', 'max:255'],
-        'phone' => ['nullable', 'numeric'],
-        'street' => ['nullable', 'string', 'max:255'],
-        'street' => ['nullable', 'string', 'max:255'],
-        'street_number' => ['nullable', 'string', 'max:255'],
-        'city' => ['nullable', 'string', 'max:255'],
-        'zipcode' => ['nullable', 'string', 'max:255'],
-        'contacts' => ['nullable', 'string', 'max:255'],
-        'country_id' => ['nullable', 'numeric'],
-        'state_id' => ['nullable', 'numeric'],
-        'currency_id' => ['nullable', 'numeric']
+        'company_name' => ['required', 'string', 'max:255'],
+        'company_email' => ['required', 'email', 'max:255'],
+        'company_address' => ['required', 'string', 'max:255'],
+        'phone' => ['required', 'numeric'],
+        'street' => ['required', 'string', 'max:255'],
+        'street' => ['required', 'string', 'max:255'],
+        'street_number' => ['required', 'string', 'max:255'],
+        'city' => ['required', 'string', 'max:255'],
+        'zipcode' => ['required', 'string', 'max:255'],
+        'contacts' => ['required', 'string', 'max:255'],
+        'country_id' => ['required', 'numeric'],
+        'state_id' => ['required', 'numeric'],
+        'currency_id' => ['required', 'numeric'],
+        'timezone' => ['required', 'string']
         ]);
     }
 
+
+    protected function validatorUser(array $data)
+    {
+        $messages = [
+        'first_name.regex' => 'The :attribute and must contain only letters!.',
+        'last_name.regex' =>   'The :attribute and must contain only letters!.',
+        'title.regex' =>   'The :attribute and must contain only letters!.',
+        'email.regex' =>  'The :attribute and must be a valid email.',
+        'password.regex' =>   'The :attribute and must contain both letters amd digits!.',
+        ];
+
+        return Validator::make($data,[
+        'first_name' => ['required', 'regex:/^[a-zA-Z]{2,20}$/', 'max:255'],
+        'last_name' => ['required', 'regex:/^[a-zA-Z]{2,20}$/', 'max:255'],
+        'title' => ['required', 'string', 'max:255'],
+        'email' => ['required', 'email:rfc', 'max:255'],
+        'password' => ['required', 'regex:/^(?=[^\s]*?[0-9])(?=[^\s]*?[a-zA-Z])[a-zA-Z0-9]*$/', 'max:255'],
+        'password_old' => ['required', 'regex:/^(?=[^\s]*?[0-9])(?=[^\s]*?[a-zA-Z])[a-zA-Z0-9]*$/', 'max:255'],
+        'password_confirmation' => ['required', 'regex:/^(?=[^\s]*?[0-9])(?=[^\s]*?[a-zA-Z])[a-zA-Z0-9]*$/', 'max:255'],
+        ],$messages);
+    }
 
 
 
@@ -163,49 +192,103 @@ class ProfileController extends Controller
 
       //check user provided input
       $validateAll = $this->validator($request->all());
+      $countryIdVal = $this->validatorId(['id'=> $request->input('country_id')]);
+      $currencyIdVal = $this->validatorId(['id'=> $request->input('currency_id')]);
+      $stateIdVal = $this->validatorId(['id'=> $request->input('state_id')]);
 
 
 
-        if(!$validateAll->fails()){
-            //get user details
-
-            $user = Auth::user();
-
-            $userDetails = $user;
-            $userDetails->name = $request->input('first_name').' '.$request->input('last_name');
-            $userDetails->save();
-
-            $FullNameSave = false;
-
-            ($userDetails) ? $FullNameSave = true : $FullNameSave = false;
-
-            //handle main profile save
-            if($FullNameSave){
+        if((!$validateAll->fails()) && (!$countryIdVal->fails()) && (!$currencyIdVal->fails()) && (!$stateIdVal->fails()))
+      {
 
                 //check if usr has saved data before
-                $userProfileData = $user->profile;
+                $userProfileData = User::where('id',auth()->user()->toArray()['id'])->first()->profile()->get();
 
-                $needed_data = ['first_name', 'last_name', 'title', 'company_name', 'company_email', 'company_address', 'phone', 'street', 'street_number', 'country_id', 'city', 'state_id', 'zipcode', 'timezone', 'contacts', 'currency_id'];
+                if($userProfileData)
+                {
+                    //cast collection result to array
+                    $collectionResult = $userProfileData->toArray();
 
-                $data_to_save = [];
-                foreach ($needed_data as $data) {
-                    if(!empty($request->input('data'))){
-                        $data_to_save[$data] = $request->input('data');
+                    if(sizeof($collectionResult) != 0)
+                    {
+
+                    $userProfile = Profile::where('user_id',auth()->user()->id)->first();
+
+
+                    $userProfile->company_name = ucfirst($request->input('company_name'));
+                    $userProfile->company_email = strtolower($request->input('company_email'));
+                    $userProfile->company_address = ucfirst($request->input('company_address'));
+                    $userProfile->phone = $request->input('phone');
+                    $userProfile->street = $request->input('street');
+                    $userProfile->street_number = $request->input('street_number');
+                    $userProfile->country_id = $request->input('country_id');
+                    $userProfile->city  = $request->input('city');
+                    $userProfile->zipcode = $request->input('zipcode');
+                    $userProfile->state_id = $request->input('state_id');
+                    $userProfile->timezone = $request->input('timezone');
+                    $userProfile->contacts = ucfirst($request->input('contacts'));
+                    $userProfile->currency_id = $request->input('currency_id');
+                    $userProfile->save();
+
+                    if($userProfile)
+                    {
+                        return redirect('/dashboard/profile/settings')->with('editStatus','Profile details saved succesfully!');
                     }
+                    else
+                    {
+                        $errorString = ['Profile details not saved, database error'];
+
+                        return redirect('/dashboard/profile/settings')->with('editErrors',$errorString);
+
+                    }
+
+                    }
+                    else
+                    {
+                        //save new data
+                        $userProfile = Profile::create([
+                            'user_id' => auth()->user()->id,
+                            'first_name' => 'null',
+                            'last_name' =>'null',
+                            'title' => 'null',
+                            'profile_picture' => 'null',
+                            'company_name' => ucfirst($request->input('company_name')),
+                            'company_email' => strtolower($request->input('company_email')),
+                            'company_address' => ucfirst($request->input('company_address')),
+                            'phone' => $request->input('phone'),
+                            'street' => $request->input('street'),
+                            'street_number' => ucfirst($request->input('street_number')),
+                            'country_id' => $request->input('country_id'),
+                            'city'  => $request->input('city'),
+                            'zipcode' => $request->input('zipcode'),
+                            'state_id' => $request->input('state_id'),
+                            'timezone' => $request->input('timezone'),
+                            'contacts' => ucfirst($request->input('contacts')),
+                            'currency_id' => $request->input('currency_id'),
+                                                ]);
+
+                        if($userProfile)
+                        {
+                            return redirect('/dashboard/profile/settings')->with('editStatus','Profile details saved succesfully!');
+
+                        }
+                        else
+                        {
+                            $errorString[] = 'Profile details not saved, database error';
+
+                            return redirect('/dashboard/profile/settings')->with('editErrors',$errorString);
+
+                        }
+
+                    }
+
                 }
+                else{
 
-                $saved_profile = $Profile->update($data_to_save);
+                    $errorString = ['Profile details not saved, database error'];
 
-                if($saved_profile){
-                    return $this->success("Profile saved", $saved_profile);
+                  return redirect('/dashboard/profile/settings')->with('editErrors',$errorString);
                 }
-
-            }else{
-
-                $errorString = ['Profile details not saved, database error'];
-
-              return redirect('/dashboard/profile')->with('editErrors',$errorString);
-            }
 
 
 
@@ -243,11 +326,182 @@ class ProfileController extends Controller
       }
 
 
-        return redirect('/dashboard/profile')->with('editErrors',$errorString);
+        return redirect('/dashboard/profile/settings')->with('editErrors',$errorString);
 
       }
 
     }
+
+
+
+
+
+
+
+
+
+    /**
+     *
+     * @param Request $request
+     *
+     *
+     *
+     */
+    function editProfileUser(Request $request)
+    {
+
+      //check user provided input
+      $validateAll = $this->validatorUser($request->all());
+
+
+
+
+        if(!$validateAll->fails())
+      {
+            //validate password
+            if($request->input('password') != $request->input('password_confirmation'))
+            {
+                $errorString = ['Profile details not saved, passwords do not match'];
+
+                return redirect('/dashboard/profile/settings')->with('editErrors',$errorString);
+            }
+
+            //get user details
+            $userDetails = auth()->user();
+
+            if (!Hash::check($request->input('password_old'), $userDetails->password))
+            {
+                $errorString = ['Profile details not saved, invalid original password provided'];
+
+                return redirect('/dashboard/profile/settings')->with('editErrors',$errorString);
+            }
+
+
+            $userDetails->name = $request->input('first_name').' '.$request->input('last_name');
+            $userDetails->email = $request->input('email');
+            $userDetails->password = Hash::make($request->input('password'));
+            $userDetails->save();
+
+            $FullNameSave = false;
+
+            ($userDetails) ? $FullNameSave = true : $FullNameSave = false;
+
+            //handle main profile save
+            if($FullNameSave)
+            {
+                //check if usr has saved data before
+                $userProfileData = User::where('id',auth()->user()->toArray()['id'])->first()->profile()->get();
+                    //dd($userProfileData);
+                if($userProfileData)
+                {
+                    //cast collection result to array
+                    $collectionResult = $userProfileData->toArray();
+
+                    if(sizeof($collectionResult) != 0)
+                    {
+
+                    $userProfile = Profile::where('user_id',auth()->user()->id)->first();
+
+                    $userProfile->first_name = $request->input('first_name');
+                    $userProfile->last_name = $request->input('last_name');
+                    $userProfile->title = $request->input('title');
+
+
+                    $userProfile->save();
+
+                    if($userProfile)
+                    {
+                        return redirect('/dashboard/profile/settings')->with('editStatus','Profile details saved succesfully!');
+                    }
+                    else
+                    {
+                        $errorString = ['Profile details not saved, database error'];
+
+                        return redirect('/dashboard/profile/settings')->with('editErrors',$errorString);
+
+                    }
+
+                    }
+                    else
+                    {
+                        //save new data
+                        $userProfile = Profile::create([
+                            'user_id' => auth()->user()->id,
+                            'first_name' => $request->input('first_name'),
+                            'last_name' => $request->input('first_name'),
+                            'title' => $request->input('title'),
+                            'profile_picture' => null,
+                            'company_name' => null,
+                            'company_email' => null,
+                            'company_address' => null,
+                            'phone' => null,
+                            'street' => null,
+                            'street_number' => null,
+                            'country_id' => 0,
+                            'city'  => null,
+                            'zipcode' => null,
+                            'state_id' => 0,
+                            'timezone' => null,
+                            'contacts' => null,
+                            'currency_id' => 0,
+                                                ]);
+
+                        if($userProfile)
+                        {
+                            return redirect('/dashboard/profile/settings')->with('editStatus','Profile details saved succesfully!');
+
+                        }
+                        else
+                        {
+                            $errorString = ['Profile details not saved, database error'];
+
+                            return redirect('/dashboard/profile/settings')->with('editErrors',$errorString);
+
+                        }
+
+                    }
+
+                }
+                else{
+
+                    $errorString = ['Profile details not saved, database error'];
+
+                  return redirect('/dashboard/profile/settings')->with('editErrors',$errorString);
+                }
+
+
+
+
+            }
+            else{
+
+                $errorString = ['Profile details not saved, database error'];
+
+              return redirect('/dashboard/profile/settings')->with('editErrors',$errorString);
+            }
+
+
+
+      }
+      else
+      {
+
+          $errorsArray = $validateAll->errors()->all();
+          $errorString = [];
+
+          //pass in a ponter of the $errorString
+          array_map(function($value)use(&$errorString)
+          {
+            $errorString[] = $value;
+          },$errorsArray);
+
+
+        return redirect('/dashboard/profile/settings')->with('editErrors',$errorString);
+
+      }
+
+    }
+
 
 
     function ImageValidation(array $array)
@@ -268,9 +522,9 @@ class ProfileController extends Controller
         if(!$imageValidate->fails())
         {
           //check if user has image
-          $userProfileData = User::where('id',auth()->user()->toArray()['id'])->find(1)->profile()->get();
+          $userProfileData = User::where('id',auth()->user()->toArray()['id'])->first()->profile()->get();
 
-          if($userProfileData)
+          if($userProfileData != null)
           {
               //cast collection result to array
               $collectionResult = $userProfileData->toArray();
@@ -281,7 +535,7 @@ class ProfileController extends Controller
                   //get profile image
                     $oldImage = $collectionResult[0]['profile_picture'];
 
-                    if($oldImage != "null")
+                    if($oldImage != null)
                     {
                         // check if user has image and unlink
                         if(file_exists(public_path($oldImage)))
@@ -294,12 +548,16 @@ class ProfileController extends Controller
 
                     $imagePathString = $this->uploadImageToFile($request->file('profileimage'));
                     //store in DB
+                    $user = User::where('id',auth()->user()->toArray()['id'])->first();
+                    $user->profile_picture = $imagePathString;
+                    $user->save();
+
                     $userProfile = Profile::where('user_id',auth()->user()->id)->first();
                     $userProfile->profile_picture = $imagePathString;
                     $userProfile->save();
                     if($userProfile)
                     {
-                        return redirect('/dashboard/profile')->with(['ImageUploadMessage' => 'User Image Uploaded succesfully']);
+                        return redirect('/dashboard/profile/settings')->with(['ImageUploadMessage' => 'User Image Uploaded succesfully']);
 
                     }
                     else
@@ -308,7 +566,7 @@ class ProfileController extends Controller
                         {
                             unlink(public_path($imagePathString));
                         }
-                        return redirect('/dashboard/profile')->with(['ImageUploadMessage' => 'User Image not uploaded succesfully, database error!']);
+                        return redirect('/dashboard/profile/settings')->with(['ImageUploadMessage' => 'User Image not uploaded succesfully, database error!']);
 
                     }
              }
@@ -319,32 +577,32 @@ class ProfileController extends Controller
                     'user_id' => auth()->user()->id,
                     'first_name' => 'none',
                     'last_name' => 'none',
-                    'title' => 'none',
+                    'title' => null,
                     'profile_picture' => $imagePathString,
-                    'company_name' => 'none',
-                    'company_email' => 'none',
-                    'company_address' => 'none',
-                    'phone' => 'none',
-                    'street' => 'none',
-                    'street_number' => 'none',
+                    'company_name' => null,
+                    'company_email' => null,
+                    'company_address' => null,
+                    'phone' => null,
+                    'street' => null,
+                    'street_number' => null,
                     'country_id' => 0,
-                    'city'  => 'none',
-                    'zipcode' => 'none',
+                    'city'  => null,
+                    'zipcode' => null,
                     'state_id' => 0,
-                    'timezone' => 'none',
-                    'contacts' => 'none',
+                    'timezone' => null,
+                    'contacts' => null,
                     'currency_id' => 0,
                                         ]);
 
 
-                  return redirect('/dashboard/profile')->with(['ImageUploadMessage' => 'User Image updated succesfully']);
+                  return redirect('/dashboard/profile/settings')->with(['ImageUploadMessage' => 'User Image updated succesfully']);
 
               }
 
           }
           else
           {
-            return redirect('/dashboard/profile')->with(['ImageUploadMessage' => 'User Image not uploaded succesfully, database error!']);
+            return redirect('/dashboard/profile/settings')->with(['ImageUploadMessage' => 'User Image not uploaded succesfully, database error!']);
           }
 
 
@@ -361,7 +619,7 @@ class ProfileController extends Controller
                 },$errorsArrayImage);
 
             }
-            return redirect('/dashboard/profile')->with(['ImageUploadMessage' => 'User Image not uploaded succesfully']);
+            return redirect('/dashboard/profile/settings')->with(['ImageUploadMessage' => 'User Image not uploaded succesfully']);
 
         }
     }

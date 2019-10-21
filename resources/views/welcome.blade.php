@@ -238,12 +238,19 @@
 							<li class="nav-item">
 								<a class="nav-link" href="{{ url('/pricing') }}">Pricing</a>
 							</li>
+							@guest
 							<li class="nav-item">
 								<a class="nav-link" href="{{ route('login') }}">Sign in</a>
 							</li>
 							<li class="nav-item">
 								<a class="nav-link" href="{{ route('register') }}">Sign up</a>
-							</li>                             
+							</li>
+							@endauth 
+							@auth
+							<li class="nav-item">
+								<a class="nav-link" href="{{ route('logout') }}">Logout</a>
+							</li>
+							@endauth
 						</ul>
 					</div>
 				</div>
@@ -264,7 +271,7 @@
 			      			<h1 class="jumbotron-heading text-dark my-5">Let us do the work for you</h1>
 					      	<p class="text-dark bold text-bold my-5">Generate estimates, invoices, contacts and much more<br> for your project</p>
 					      	<p class="text-dark my-5">
-					        	<a href="{{ url('/guest/create_estimate') }}" class="btn btn-secondary btn-lg py-2">Generate an Estimate</a>
+					        	<a href="{{ url('/estimate/create/step1') }}" class="btn btn-secondary btn-lg py-2">Generate an Estimate</a>
 					      	</p>
 			      		</div>
 			      		<div class="col-12 col-md-7 col-lg-6 order-2 aos-init aos-animate">
@@ -288,7 +295,7 @@
 			  						We take into consideration your work hours, subcontractors, among other things, to make sure you always have a healthy profit at the end of the day
 			  					</p>
 			  					<p class="text-dark my-4">
-						        	<a href="{{ url('/guest/create_estimate') }}" class="btn btn-secondary btn-lg py-2">Generate an Estimate</a>
+						        	<a href="{{ url('/estimate/create/step1') }}" class="btn btn-secondary btn-lg py-2">Generate an Estimate</a>
 						      	</p>
 		  					</div>
 		  				</div>

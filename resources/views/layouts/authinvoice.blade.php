@@ -353,7 +353,9 @@ table.project-table tbody tr td, table.project-table thead tr th {
      <!-- Side Nav -->
     <nav id="sidebar">
         <div class="sidebar-header">
-            <img src="https://lancer-app.000webhostapp.com/images/svg/Lancers.svg" height="35" width="auto" class="img img-responsive">
+
+        <a href="{{ url('dashboard') }}"><img src="https://lancer-app.000webhostapp.com/images/svg/Lancers.svg" height="35" width="auto" class="img img-responsive"></a>
+
         </div>
         <ul class="list-unstyled components">
             <li class=" @if(request()->path() == 'dashboard') active @endif">

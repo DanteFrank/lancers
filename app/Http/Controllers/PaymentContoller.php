@@ -55,7 +55,7 @@ class PaymentContoller extends Controller
             if($sub){
                 if($sub->plan_id > $data['id']){
                     // return session value here
-                    return $this->error("Sorry, you cannot downgrade your subscription");
+                    return "Sorry, you cannot downgrade your subscription";
                 }
 
                 if($data['id'] > $sub->plan_id){                    
@@ -73,9 +73,9 @@ class PaymentContoller extends Controller
             // if($data['id'] == 1){
             //     return redirect($data['redirect']);
             // }
-            return $this->success("payment details retrieved", $data);
+            return view('paystackpay')->with('data', $data);
         }else{
-            return $this->error("Invalid payment option");
+            return "Invalid payment option";
         }
     }
 
